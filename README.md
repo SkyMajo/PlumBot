@@ -8,8 +8,9 @@ For the song ordering function, please send the bullet screen "点歌[mid]" in t
 # Thanks
 - Thank you for your support to IRC from the 'pircbotx'
 
-https://github.com/pircbotx/pircbotx
+    https://github.com/pircbotx/pircbotx
 - Thank 'BiliBili danmaku listener' for its support of BiliBili live barrage crawling function.
-https://github.com/Saki9/Bilibili-danmaku-Listener
+
+    https://github.com/Saki9/Bilibili-danmaku-Listener
 
 
