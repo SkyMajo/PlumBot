@@ -44,7 +44,7 @@ public class MessageHandleService {
                     String lastMsg = "";
                     if (msg.contains("点歌")){
                         String mid = msg.replace("点歌", "");
-                        mid = "https://osu.ppy.sh/b/"+mid;
+                        mid = "[https://osu.ppy.sh/beatmapsets/"+mid+"]";
                          lastMsg = mid+"       ---来自"+barrage.getUname()+"的点歌";
                     }else{
                          lastMsg = barrage.getUname()+"说:"+msg;
