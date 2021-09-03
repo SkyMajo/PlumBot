@@ -5,7 +5,7 @@
 Then you can view the pavement and barrage sent by the audience through the private chat channel.
 For the song ordering function, please send the bullet screen "点歌[mid]" in the live broadcasting room.
 
-#Thanks
+# Thanks
 - Thank you for your support to IRC from the 'pircbotx'
 https://github.com/pircbotx/pircbotx
 - Thank 'BiliBili danmaku listener' for its support of BiliBili live barrage crawling function.
