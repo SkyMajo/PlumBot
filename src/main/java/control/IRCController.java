@@ -28,6 +28,8 @@ public class IRCController extends ListenerAdapter {
     //OsuChannelThread
     private Thread osuThread;
     private int index = 0;
+    private boolean isTest = true;
+    public static volatile PircBotX bot = null;
 
     @Override
     public void onGenericMessage(GenericMessageEvent event) throws Exception {
@@ -48,6 +50,7 @@ public class IRCController extends ListenerAdapter {
                 event.respondPrivateMessage(Conn.HELP_TIPS_2);
             }else {
                 Config.player4channels.put(nickName,biLiveUid);
+                Config.channels4player.put(biLiveUid,nickName);
                 event.respondPrivateMessage(Conn.BLINDED_TIPS+biLiveUid+Conn.HOME);
                 System.out.println(Conn.BLINDED_TIPS+biLiveUid+Conn.HOME);
                 startBiLiBiLiLiveWebSocket(biLiveUid);
@@ -107,7 +110,7 @@ public class IRCController extends ListenerAdapter {
         osuThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                PircBotX bot = null;
+
                 try {  //Try catch so we can handle the interrupted exception we will throw
                     while (!Thread.interrupted()) { //while loop so we can throw interrupted exception in order to close
                         //Configure osu! bot with given info

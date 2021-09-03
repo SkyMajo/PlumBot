@@ -39,7 +39,10 @@ public class Config {
     public  static HashMap<String,String> resultStrs = new HashMap<String,String>();
     //双向绑定的id数据集，OSUID是唯一key，频道ID是Value
     public final static HashMap<String , String> player4channels = new HashMap<>();
+    public final static HashMap<String , String> channels4player = new HashMap<>();
+    //绑定WebSocket与bilibili直播间ID
 
+    public final static HashMap<WebSocket , String> webSocket4RoomId = new HashMap<>();
 
 
 }

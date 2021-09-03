@@ -4,11 +4,14 @@ package service;
 import conf.ConfigProperties;
 import conf.WebSocket;
 
+import javax.net.ssl.SSLSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static conf.Config.webSocket4RoomId;
 
 /**
  * @author 本間Saki
@@ -16,6 +19,7 @@ import java.util.TimerTask;
 public class MakeClientService {
 
 	private final String url;
+	private final String roomId;
 
 	private final String clientHead;
 
@@ -24,6 +28,7 @@ public class MakeClientService {
 	private final String heartByte;
 
 	public MakeClientService(String roomId) {
+		this.roomId = roomId;
 		url = ConfigProperties.getProperty("url");
 
 		heartByte = ConfigProperties.getProperty("heartByte");
@@ -43,13 +48,13 @@ public class MakeClientService {
 		// 建立连接
 		WebSocket client = new WebSocket(url);
 		client.connectBlocking();
-
 		// 发送连接参数
         byte[] head = hexToByteArray(clientHead);
         byte[] body = clientBody.getBytes(StandardCharsets.UTF_8);
         byte[] requestCode = byteMerger(head, body);
-        client.send(requestCode);
 
+        client.send(requestCode);
+		webSocket4RoomId.put(client,roomId);
         // 定时发送心跳包
 		new Timer().schedule(new TimerTask() {
 			@Override

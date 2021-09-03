@@ -14,8 +14,11 @@ import java.util.zip.DataFormatException;
  */
 public class WebSocket extends WebSocketClient {
 
+    private String url;
+
 	public WebSocket(String url) throws URISyntaxException {
         super(new URI(url));
+        this.url = url;
     }
  
     @Override
@@ -25,7 +28,8 @@ public class WebSocket extends WebSocketClient {
     @Override
     public void onMessage(ByteBuffer message) {
         try {
-            new MessageHandleService().messageHandle(message);
+            String roomId = Config.webSocket4RoomId.get(this);
+            new MessageHandleService().messageHandle(roomId,message);
         } catch (DataFormatException e) {
             e.printStackTrace();
         }
