@@ -14,6 +14,10 @@ import tools.ParseIndentityTools;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @Auth : Sustain ❀
+ * @Time : 9-3 -> 2021
+ */
 public class ConvertsThread extends  Thread{
 
     public volatile boolean FLAG = false;

@@ -15,6 +15,8 @@ import static conf.Config.webSocket4RoomId;
 
 /**
  * @author 本間Saki
+ * @Changed Sustain ❀
+ * @Date 2021年9月3日
  */
 public class MakeClientService {
 

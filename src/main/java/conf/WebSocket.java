@@ -10,7 +10,8 @@ import java.nio.ByteBuffer;
 import java.util.zip.DataFormatException;
 
 /**
- * @author 本間Saki
+ * @Auth : Sustain ❀
+ * @Time : 9-3 -> 2021
  */
 public class WebSocket extends WebSocketClient {
 

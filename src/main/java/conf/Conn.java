@@ -1,5 +1,9 @@
 package conf;
 
+/**
+ * @Auth : Sustain ❀
+ * @Time : 9-3 -> 2021
+ */
 public class Conn {
 
     public static final String HELP_TIPS = "请输入!bind 直播间房间号(仅限于BILBILI) ❀";

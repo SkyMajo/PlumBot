@@ -9,6 +9,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @Auth : Sustain ❀
+ * @Time : 9-3 -> 2021
+ */
 public class ThreadComponentImp implements ThreadComponent{
 
     /**

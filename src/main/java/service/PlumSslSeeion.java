@@ -6,6 +6,11 @@ import javax.net.ssl.SSLSessionContext;
 import java.security.Principal;
 import java.security.cert.Certificate;
 
+/**
+ * @Auth : Sustain ❀
+ * @Time : 9-2 -> 2021
+ */
+
 public class PlumSslSeeion implements SSLSession {
 
     private String roomId = "";

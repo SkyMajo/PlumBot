@@ -115,8 +115,8 @@ public class IRCController extends ListenerAdapter {
                     while (!Thread.interrupted()) { //while loop so we can throw interrupted exception in order to close
                         //Configure osu! bot with given info
                         Configuration configuration = new Configuration.Builder()
-                                .setAutoNickChange(false) //Twitch doesn't support multiple users
-                                .setOnJoinWhoEnabled(false) //Twitch doesn't support WHO command
+                                .setAutoNickChange(false)
+                                .setOnJoinWhoEnabled(false)
                                 .setCapEnabled(true)
                                 .setName(Config.IRC_NAME) //Set the nick of the bot. CHANGE IN YOUR CODE
                                 .setServerPassword(Config.IRC_PASSWORD)//Server password from https://osu.ppy.sh/p/irc
