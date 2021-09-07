@@ -10,6 +10,7 @@ import entity.danmu_data.Hbarrage;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -43,9 +44,16 @@ public class MessageHandleService {
                     String msg = barrage.getMsg();
                     String lastMsg = "";
                     if (msg.contains("点歌")){
-                        String mid = msg.replace("点歌", "");
-                        mid = "[https://osu.ppy.sh/beatmapsets/"+mid+"]";
-                         lastMsg = mid+"       ---来自"+barrage.getUname()+"的点歌";
+                        String mid = msg.replace("点歌", "").trim();
+                        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+                        boolean matches = pattern.matcher(mid).matches();
+                        if (matches && !mid.isEmpty()){
+                            System.out.println("是数字");
+                            mid = "https://osu.ppy.sh/beatmapsets/"+mid+"";
+                            lastMsg = mid+"       ---来自"+barrage.getUname()+"的点歌";
+                        } else{
+                            lastMsg = barrage.getUname()+"说:"+msg;
+                        }
                     }else{
                          lastMsg = barrage.getUname()+"说:"+msg;
                     }

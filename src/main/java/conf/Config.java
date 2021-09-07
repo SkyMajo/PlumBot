@@ -2,6 +2,7 @@ package conf;
 
 import control.IRCController;
 import ext.ConvertsThread;
+import tools.SustainHashMap;
 
 import java.util.HashMap;
 import java.util.Vector;
@@ -20,10 +21,10 @@ public class Config {
      * a57754a5
      */
 
-    public static final String IRC_NAME = "Sustain";
+    public static final String IRC_NAME = "PlumBot";
     public static final String OSU_IP = "irc.ppy.sh";
     public static final String OSU_PORT = "6667";
-    public static final String IRC_PASSWORD = "a57754a5";
+    public static final String IRC_PASSWORD = "bec8ba5e";
     public static IRCController controller = null;
 
     /**
@@ -38,11 +39,11 @@ public class Config {
     //处理弹幕包集合
     public  static HashMap<String,String> resultStrs = new HashMap<String,String>();
     //双向绑定的id数据集，OSUID是唯一key，频道ID是Value
-    public final static HashMap<String , String> player4channels = new HashMap<>();
-    public final static HashMap<String , String> channels4player = new HashMap<>();
+    public final static SustainHashMap<String , String> player4channels = new SustainHashMap<>();
+    public final static SustainHashMap<String , String> channels4player = new SustainHashMap<>();
     //绑定WebSocket与bilibili直播间ID
 
-    public final static HashMap<WebSocket , String> webSocket4RoomId = new HashMap<>();
+    public final static SustainHashMap<WebSocket , String> webSocket4RoomId = new SustainHashMap<>();
 
 
 }

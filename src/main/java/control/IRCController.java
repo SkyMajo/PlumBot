@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 
 /**
@@ -35,7 +36,7 @@ public class IRCController extends ListenerAdapter {
     public void onGenericMessage(GenericMessageEvent event) throws Exception {
         super.onGenericMessage(event);
         String msg = event.getMessage();
-
+//        System.out.println(event.getUser().getNick()+": = > "+msg);
         if (msg.isEmpty()) {
             return;
         }
@@ -46,14 +47,26 @@ public class IRCController extends ListenerAdapter {
             System.out.println( Timer()+" "+event.getUser().getNick()+"： "+event.getMessage());
             String nickName = event.getUser().getNick();
             String biLiveUid = msg.replace("!bind", "").trim();
+            Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+            boolean matches = pattern.matcher(biLiveUid).matches();
             if (biLiveUid.isEmpty()){
                 event.respondPrivateMessage(Conn.HELP_TIPS_2);
             }else {
-                Config.player4channels.put(nickName,biLiveUid);
-                Config.channels4player.put(biLiveUid,nickName);
-                event.respondPrivateMessage(Conn.BLINDED_TIPS+biLiveUid+Conn.HOME);
-                System.out.println(Conn.BLINDED_TIPS+biLiveUid+Conn.HOME);
-                startBiLiBiLiLiveWebSocket(biLiveUid);
+                if (!matches){
+                    event.respondPrivateMessage("是房间号啦baka，不是中文！");
+                }else{
+                    /**
+                     * @url https://github.com/SkyMajo/PlumBot/issues/1
+                     * !bind 已绑定过的直播间 会出现两个WebSocket来推送消息
+                     * 看了下HashMap的put方法，因为Key是泛型，这里源码判断是否相等只是判断了Object.equals || ==
+                     * 并不是String的方法(泛型被擦除了
+                     * so,这里需要去重写一下传值
+                     */
+                    Config.player4channels.put(nickName,biLiveUid);
+                    Config.channels4player.put(biLiveUid,nickName);
+                    event.respondPrivateMessage(Conn.BLINDED_TIPS+biLiveUid+Conn.HOME);
+                    System.out.println(Conn.BLINDED_TIPS+biLiveUid+Conn.HOME);
+                    startBiLiBiLiLiveWebSocket(biLiveUid);
 //                if (Config.convertsThread == null) {
 //                    System.out.println("DEBUG == > convertsThread IS NULL");
 //                    Config.convertsThread = new ConvertsThread();
@@ -70,6 +83,8 @@ public class IRCController extends ListenerAdapter {
 //                }else{
 //                    System.out.println("DEBUG ==> 该用户已绑定");
 //                }
+                }
+
             }
         }
 
