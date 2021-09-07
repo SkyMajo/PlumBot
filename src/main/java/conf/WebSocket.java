@@ -16,6 +16,7 @@ import java.util.zip.DataFormatException;
 public class WebSocket extends WebSocketClient {
 
     private String url;
+    private MessageHandleService messageHandleService;
 
 	public WebSocket(String url) throws URISyntaxException {
         super(new URI(url));
@@ -24,13 +25,18 @@ public class WebSocket extends WebSocketClient {
  
     @Override
     public void onOpen(ServerHandshake shake) {
+        messageHandleService = new MessageHandleService();
     }
 
     @Override
     public void onMessage(ByteBuffer message) {
         try {
+            if (messageHandleService == null){
+                return;
+            }
+            //2021年9月7日 info:已将MessageHandleService修改为全局对象，防止大量创建内存抖动 --Sustain
             String roomId = Config.webSocket4RoomId.get(this);
-            new MessageHandleService().messageHandle(roomId,message);
+            messageHandleService.messageHandle(roomId,message);
         } catch (DataFormatException e) {
             e.printStackTrace();
         }
