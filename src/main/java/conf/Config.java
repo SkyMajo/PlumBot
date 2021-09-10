@@ -25,7 +25,10 @@ public class Config {
     public static final String OSU_IP = "irc.ppy.sh";
     public static final String OSU_PORT = "6667";
     public static final String IRC_PASSWORD = "bec8ba5e";
+    public static final String k = "3f48757aeff51c8be7fcf328d78632c55d82b12e";
     public static IRCController controller = null;
+    public static final String PPY_URL = "https://osu.ppy.sh/";
+    public static final String GET_BEATMAPS = "api/get_beatmaps";
 
     /**
      * ====BiliBili====
@@ -44,6 +47,7 @@ public class Config {
     //绑定WebSocket与bilibili直播间ID
 
     public final static SustainHashMap<WebSocket , String> webSocket4RoomId = new SustainHashMap<>();
+    public final static SustainHashMap<String , WebSocket> roomId4webSocket = new SustainHashMap<>();
 
 
 }
