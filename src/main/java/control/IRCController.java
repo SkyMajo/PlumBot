@@ -2,6 +2,7 @@ package control;
 
 import conf.Config;
 import conf.Conn;
+import conf.WebSocket;
 import ext.ConvertsThread;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
@@ -86,6 +87,25 @@ public class IRCController extends ListenerAdapter {
                 }
 
             }
+        }
+        else if (msg.contains("!unbind")){
+            System.out.println("DEBUG ==> 收到unbind指令");
+            //  U sie rin jo xi zo ra
+            String nickName = event.getUser().getNick();
+            String biLiveUid = Config.player4channels.get(nickName);
+            if (biLiveUid.isEmpty()){
+                event.respondPrivateMessage("您还尚未绑定。");
+            }else{
+                Config.player4channels.remove(nickName);
+                Config.channels4player.remove(biLiveUid);
+                WebSocket webSocket = Config.roomId4webSocket.get(biLiveUid);
+                Config.webSocket4RoomId.remove(webSocket);
+                Config.roomId4webSocket.remove(biLiveUid);
+                webSocket.close();
+                event.respondPrivateMessage("已取消房间"+biLiveUid+"与您的绑定。");
+                System.out.println("已取消房间"+biLiveUid+"与"+nickName+"的绑定。");
+            }
+
         }
 
 

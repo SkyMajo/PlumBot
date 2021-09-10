@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static conf.Config.roomId4webSocket;
 import static conf.Config.webSocket4RoomId;
 
 /**
@@ -57,14 +58,18 @@ public class MakeClientService {
 
         client.send(requestCode);
 		webSocket4RoomId.put(client,roomId);
+		roomId4webSocket.put(roomId,client);
         // 定时发送心跳包
-		new Timer().schedule(new TimerTask() {
-			@Override
-			public void run() {
-				client.send(hexToByteArray(heartByte));
-				System.out.println("心跳发送成功");
-			}
-		}, 0L, 30000L);
+		if (client!=null &&!client.isClosed()){
+			new Timer().schedule(new TimerTask() {
+				@Override
+				public void run() {
+					client.send(hexToByteArray(heartByte));
+					System.out.println("心跳发送成功");
+				}
+			}, 0L, 30000L);
+		}
+
 	}
 
 	/**

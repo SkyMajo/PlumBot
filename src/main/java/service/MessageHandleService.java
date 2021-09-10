@@ -6,6 +6,8 @@ import conf.Config;
 import control.IRCController;
 import entity.danmu_data.Barrage;
 import entity.danmu_data.Hbarrage;
+import tools.CallBack;
+import tools.HttpServers;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -23,12 +25,14 @@ import static conf.Config.resultStrs;
  */
 public class MessageHandleService {
 
-    JSONObject jsonObject = null;
-    JSONArray array= null;
-    String message = "";
-    String cmd = "";
-    Barrage barrage;
-    Hbarrage hbarrage;
+    private JSONObject jsonObject = null;
+    private JSONArray array= null;
+    private String message = "";
+    private String cmd = "";
+    private Barrage barrage;
+    private Hbarrage hbarrage;
+    private volatile String lastMsg = "";
+
     StringBuilder stringBuilder = new StringBuilder();
 
     public void messageHandle(String roomId , ByteBuffer message) throws DataFormatException {
@@ -42,22 +46,54 @@ public class MessageHandleService {
                     //弹幕内容
                     convert();
                     String msg = barrage.getMsg();
-                    String lastMsg = "";
+
                     if (msg.contains("点歌")){
                         String mid = msg.replace("点歌", "").trim();
                         Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
                         boolean matches = pattern.matcher(mid).matches();
                         if (matches && !mid.isEmpty()){
                             System.out.println("是数字");
-                            mid = "https://osu.ppy.sh/beatmapsets/"+mid+"";
-                            lastMsg = mid+"       ---来自"+barrage.getUname()+"的点歌";
+
+                            new HttpServers()
+                                    .setFormValue("b",mid)
+                                    .setFormValue("k",Config.k)
+                                    .postFormBody(Config.GET_BEATMAPS,new CallBack() {
+                                        @Override
+                                        public void onSuccess(String data) {
+                                            JSONArray array = new JSONArray().parseArray(data);
+                                            JSONObject json = array.getJSONObject(0);
+                                            String titleUnicode = json.getString("title_unicode");
+                                            String bpm = json.getString("bpm");
+                                            String hp = json.getString("diff_drain");
+                                            String ar = json.getString("diff_approach");
+                                            String cs = json.getString("diff_size");
+                                            String od = json.getString("diff_overall");
+                                            String maxCombo = json.getString("max_combo");
+                                            String beatmapsetId = json.getString("beatmapset_id");
+                                            String link = "is listening to [osu.ppy.sh/beatmapsets/"+beatmapsetId+"#/"+mid+" "+titleUnicode+"]";
+
+                                            String npStr  = link +"     {||ar:"+ar+" | cs:"+cs+" | hp:"+hp+" | od:"+od+"||} BPM:"+bpm+" || MaxCombo:"+maxCombo+"  --by "+barrage.getUname();
+                                            try{
+                                                IRCController.bot.send().message(Config.channels4player.get(roomId),npStr);
+                                            }catch (Exception e){
+                                                System.out.println(e.getMessage());
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFail(String error) {
+
+                                        }
+                                    });
+
                         } else{
                             lastMsg = barrage.getUname()+"说:"+msg;
+                            IRCController.bot.send().message(Config.channels4player.get(roomId),lastMsg);
                         }
                     }else{
-                         lastMsg = barrage.getUname()+"说:"+msg;
+                        lastMsg = barrage.getUname()+"说:"+msg;
+                        IRCController.bot.send().message(Config.channels4player.get(roomId),lastMsg);
                     }
-                    IRCController.bot.send().message(Config.channels4player.get(roomId),lastMsg);
                     System.out.println(lastMsg);
                 }
             }catch (com.alibaba.fastjson.JSONException e){
